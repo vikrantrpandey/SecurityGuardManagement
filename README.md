@@ -2,13 +2,24 @@
 
 A comprehensive system for managing security guards, their assignments, training records, and employment history.
 
-## Features
+## Project Status
 
-- Guard Management (CRUD operations)
-- Employment History Tracking
-- Training Records
-- Guard Assignments
-- Address Management
+### Completed Features
+- Project structure and architecture setup
+- Domain layer implementation
+  - Base entities and abstractions
+  - Guard-related entities and value objects
+  - Enums and common types
+- Initial database migration
+- Basic CRUD operations for Guards
+- Git repository setup with Phase1 branch
+
+### In Progress
+- Application layer service interfaces
+- Additional controllers implementation
+- Validation logic
+- Testing setup
+- Documentation
 
 ## Technology Stack
 
@@ -17,6 +28,13 @@ A comprehensive system for managing security guards, their assignments, training
 - Clean Architecture
 - CQRS Pattern with MediatR
 - AutoMapper for object mapping
+
+## Project Structure
+
+- **SecurityGuardManagement.API**: Web API layer
+- **SecurityGuardManagement.Application**: Application logic, commands, and queries
+- **SecurityGuardManagement.Domain**: Domain entities and business logic
+- **SecurityGuardManagement.Infrastructure**: Data access and external services
 
 ## Getting Started
 
@@ -32,9 +50,14 @@ A comprehensive system for managing security guards, their assignments, training
    dotnet run --project src/SecurityGuardManagement.API/SecurityGuardManagement.API.csproj
    ```
 
-## Project Structure
+## Development Branches
 
-- **SecurityGuardManagement.API**: Web API layer
-- **SecurityGuardManagement.Application**: Application logic, commands, and queries
-- **SecurityGuardManagement.Domain**: Domain entities and business logic
-- **SecurityGuardManagement.Infrastructure**: Data access and external services
+- `master`: Main stable branch
+- `Phase1`: Current development branch with initial implementation
+
+## Next Steps
+- Complete remaining service interfaces
+- Implement additional controllers
+- Add validation using FluentValidation
+- Set up testing infrastructure
+- Enhance error handling and logging
