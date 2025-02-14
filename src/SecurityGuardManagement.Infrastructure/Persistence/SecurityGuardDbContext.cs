@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using SecurityGuardManagement.Domain.Entities;
 using SecurityGuardManagement.Domain.ValueObjects;
 using SecurityGuardManagement.Domain.Common;
+using SecurityGuardManagement.Domain.Enums;
 
 namespace SecurityGuardManagement.Infrastructure.Persistence;
 
@@ -36,38 +37,50 @@ public class SecurityGuardDbContext : DbContext
         modelBuilder.Entity<GuardAssignment>()
             .HasOne(ga => ga.Guard)
             .WithMany(g => g.Assignments)
-            .HasForeignKey(ga => ga.GuardId);
+            .HasForeignKey(ga => ga.GuardId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<GuardAssignment>()
             .HasOne(ga => ga.Post)
             .WithMany(p => p.Assignments)
-            .HasForeignKey(ga => ga.PostId);
+            .HasForeignKey(ga => ga.PostId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<GuardEducation>()
             .HasOne(ge => ge.Guard)
             .WithMany(g => g.Education)
-            .HasForeignKey(ge => ge.GuardId);
+            .HasForeignKey(ge => ge.GuardId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<GuardTraining>()
             .HasOne(gt => gt.Guard)
             .WithMany(g => g.Training)
-            .HasForeignKey(gt => gt.GuardId);
+            .HasForeignKey(gt => gt.GuardId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<EmploymentHistory>()
             .HasOne(eh => eh.Guard)
             .WithMany(g => g.EmploymentHistory)
-            .HasForeignKey(eh => eh.GuardId);
+            .HasForeignKey(eh => eh.GuardId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Post>()
             .HasOne(p => p.Client)
             .WithMany(c => c.Posts)
-            .HasForeignKey(p => p.ClientId);
+            .HasForeignKey(p => p.ClientId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<GuardAddress>()
             .HasOne(ga => ga.Guard)
             .WithMany()
             .HasForeignKey(ga => ga.GuardId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Guard>()
+            .HasOne(g => g.GuardLevel)
+            .WithMany()
+            .HasForeignKey(g => g.GuardLevelId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         // Configure unique indexes
         modelBuilder.Entity<Guard>()
@@ -120,6 +133,58 @@ public class SecurityGuardDbContext : DbContext
                 CreatedAt = seedTime
             }
         );
+
+        // Seed Client data
+        modelBuilder.Entity<Client>().HasData(
+            new
+            {
+                Id = 1,
+                Name = "Example Corporation",
+                Status = ClientStatus.Active,
+                CreatedAt = seedTime
+            }
+        );
+
+        modelBuilder.Entity<Client>()
+            .OwnsOne(c => c.ContactInfo)
+            .HasData(
+                new
+                {
+                    ClientId = 1,
+                    Phone = "+9779841000000",
+                    Email = "contact@example.com"
+                }
+            );
+
+        // Seed Post data
+        modelBuilder.Entity<Post>().HasData(
+            new
+            {
+                Id = 1,
+                ClientId = 1,
+                Name = "Main Office Security",
+                Description = "Main entrance security post",
+                Status = PostStatus.Active,
+                RequiredGuardCount = 2,
+                CreatedAt = seedTime
+            }
+        );
+
+        modelBuilder.Entity<Post>()
+            .OwnsOne(p => p.PostAddress)
+            .HasData(
+                new
+                {
+                    PostId = 1,
+                    Street = "123 Main Street",
+                    City = "Kathmandu",
+                    District = "Kathmandu",
+                    Province = "Bagmati",
+                    State = "Bagmati",
+                    Country = "Nepal",
+                    PostalCode = "44600"
+                }
+            );
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
