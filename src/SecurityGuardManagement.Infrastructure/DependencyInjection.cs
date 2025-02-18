@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using SecurityGuardManagement.Application.Common.Interfaces;
 using SecurityGuardManagement.Infrastructure.Persistence;
 using SecurityGuardManagement.Infrastructure.Repositories;
+using SecurityGuardManagement.Application.Auth.Services;
+using SecurityGuardManagement.Infrastructure.Services;
 
 namespace SecurityGuardManagement.Infrastructure;
 
@@ -16,6 +18,7 @@ public static class DependencyInjection
 
         services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IAuthService, AuthService>();
 
         return services;
     }
